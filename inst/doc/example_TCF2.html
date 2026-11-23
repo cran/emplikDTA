@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Duc-Khanh To" />
+
+<meta name="date" content="2026-11-05" />
+
+<title>Inference for the Middle True Class Fraction</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Inference for the Middle True Class
+Fraction</h1>
+<h4 class="author">Duc-Khanh To</h4>
+<h4 class="date">2026-11-05</h4>
+
+
+
+<div id="simulated-data" class="section level1">
+<h1>Simulated data</h1>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>mu_true <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">2.5</span>, <span class="fl">3.69</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>sigma_true <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">1.1</span>, <span class="fl">1.2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>n1 <span class="ot">&lt;-</span> <span class="dv">30</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>n2 <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>n3 <span class="ot">&lt;-</span> <span class="dv">30</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>X1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n1, mu_true[<span class="dv">1</span>], sigma_true[<span class="dv">1</span>])</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>X2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n2, mu_true[<span class="dv">2</span>], sigma_true[<span class="dv">2</span>])</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>X3 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n3, mu_true[<span class="dv">3</span>], sigma_true[<span class="dv">3</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>out_tcf2 <span class="ot">&lt;-</span> <span class="fu">tcf2</span>(<span class="at">x =</span> X1, <span class="at">y =</span> X2, <span class="at">z =</span> X3, <span class="at">tcf10 =</span> <span class="fl">0.8</span>, <span class="at">tcf30 =</span> <span class="fl">0.8</span>, </span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>                 <span class="at">tcf20 =</span> <span class="fl">0.5</span>, <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>out_tcf2</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; CALL: tcf2.default(x = X1, y = X2, z = X3, tcf10 = 0.8, tcf30 = 0.8, </span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt;     tcf20 = 0.5, plot = TRUE)</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt;  </span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; TCF1:</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; [1] 0.8</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; TCF3:</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; [1] 0.8</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; Thresholds estimate:</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; [1] 0.9402617 3.1406283</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; TCF2 estimate:</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; [1] 0.62</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt; 95% Confidence interval:</span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt; [1] 0.3106687 0.8720559</span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt;  p-value: 0.4571848</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>data_test <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">biom =</span> <span class="fu">c</span>(X1, X2, X3), </span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>                        <span class="at">diag =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;1&quot;</span>, <span class="st">&quot;2&quot;</span>, <span class="st">&quot;3&quot;</span>), <span class="fu">c</span>(n1, n2, n3)))</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>out_tcf2_2 <span class="ot">&lt;-</span> <span class="fu">tcf2</span>(<span class="at">formula =</span> biom <span class="sc">~</span> diag, <span class="at">data =</span> data_test, <span class="at">tcf10 =</span> <span class="fl">0.8</span>, </span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>                   <span class="at">tcf30 =</span> <span class="fl">0.8</span>, <span class="at">tcf20 =</span> <span class="fl">0.5</span>, <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>out_tcf2_2</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt; CALL: tcf2.formula(formula = biom ~ diag, data = data_test, tcf10 = 0.8, </span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt;     tcf30 = 0.8, tcf20 = 0.5, plot = TRUE)</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt;  </span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; TCF1:</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; [1] 0.8</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; TCF3:</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt; [1] 0.8</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt; Thresholds estimate:</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt; [1] 0.9402617 3.1406283</span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="co">#&gt; TCF2 estimate:</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co">#&gt; [1] 0.62</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&gt; 95% Confidence interval:</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co">#&gt; [1] 0.3106687 0.8720559</span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="co">#&gt;  p-value: 0.4571848</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">summary</span>(out_tcf2_2)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&gt; $estimate</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt; [1] 0.62</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&gt; $conf.int</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt; [1] 0.3106687 0.8720559</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt; $p.value</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#&gt; [1] 0.4571848</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="co">#&gt; $n</span></span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="co">#&gt; n1 n2 n3 </span></span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co">#&gt; 30 50 30 </span></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="co">#&gt; attr(,&quot;class&quot;)</span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="co">#&gt; [1] &quot;summary.tcf2&quot;</span></span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

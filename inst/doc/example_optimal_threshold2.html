@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Duc-Khanh To" />
+
+<meta name="date" content="2026-11-05" />
+
+<title>Guide for using threshold2 function</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Guide for using threshold2 function</h1>
+<h4 class="author">Duc-Khanh To</h4>
+<h4 class="date">2026-11-05</h4>
+
+
+
+<div id="simulated-data" class="section level1">
+<h1>Simulated data</h1>
+<div id="gamma-and-log-normal-data" class="section level2">
+<h2>Gamma and Log-Normal data</h2>
+<p>Obtaining the true value for optimal threshold.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>YI_logGamma <span class="ot">&lt;-</span> <span class="cf">function</span>(mu, sigma, <span class="at">start =</span> <span class="cn">NULL</span>, <span class="at">method.optim =</span> <span class="st">&quot;L-BFGS-B&quot;</span>,</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>                        <span class="at">maxit =</span> <span class="dv">200</span>, <span class="at">lower =</span> <span class="dv">0</span>, <span class="at">upper =</span> <span class="cn">Inf</span>){</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">is.null</span>(start)) start <span class="ot">&lt;-</span> <span class="fu">mean</span>(mu)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  YI_logGamma_ff <span class="ot">&lt;-</span> <span class="cf">function</span>(par, mu, sigma){</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>    sp <span class="ot">&lt;-</span> <span class="fu">plnorm</span>(par, <span class="at">meanlog =</span> mu[<span class="dv">1</span>], <span class="at">sdlog =</span> sigma[<span class="dv">1</span>])</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>    se <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pgamma</span>(par, <span class="at">shape =</span> mu[<span class="dv">2</span>], <span class="at">rate =</span> sigma[<span class="dv">2</span>])</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>    <span class="fu">return</span>(se <span class="sc">+</span> sp <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>  }</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>  YI_optim <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="at">par =</span> start, <span class="at">fn =</span> YI_logGamma_ff, <span class="at">mu =</span> mu, <span class="at">sigma =</span> sigma,</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>                    <span class="at">method =</span> method.optim,</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>                    <span class="at">control =</span> <span class="fu">list</span>(<span class="at">maxit =</span> maxit, <span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>),</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>                    <span class="at">lower =</span> lower, <span class="at">upper =</span> upper)</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>  <span class="fu">return</span>(YI_optim)</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>}</span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>CtP_logGamma <span class="ot">&lt;-</span> <span class="cf">function</span>(mu, sigma, <span class="at">start =</span> <span class="cn">NULL</span>, <span class="at">method.optim =</span> <span class="st">&quot;L-BFGS-B&quot;</span>,</span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>                         <span class="at">maxit =</span> <span class="dv">200</span>, <span class="at">lower =</span> <span class="dv">0</span>, <span class="at">upper =</span> <span class="cn">Inf</span>){</span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">is.null</span>(start)) start <span class="ot">&lt;-</span> <span class="fu">mean</span>(mu)</span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>  CtP_logGamma_ff <span class="ot">&lt;-</span> <span class="cf">function</span>(par, mu, sigma){</span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a>    sp <span class="ot">&lt;-</span> <span class="fu">plnorm</span>(par, <span class="at">meanlog =</span> mu[<span class="dv">1</span>], <span class="at">sdlog =</span> sigma[<span class="dv">1</span>])</span>
+<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a>    se <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pgamma</span>(par, <span class="at">shape =</span> mu[<span class="dv">2</span>], <span class="at">rate =</span> sigma[<span class="dv">2</span>])</span>
+<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a>    <span class="fu">return</span>((<span class="dv">1</span> <span class="sc">-</span> sp)<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">-</span> se)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a>  }</span>
+<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a>  CtP_optim <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="at">par =</span> start, <span class="at">fn =</span> CtP_logGamma_ff, <span class="at">mu =</span> mu, <span class="at">sigma =</span> sigma,</span>
+<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a>                    <span class="at">method =</span> method.optim,</span>
+<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a>                    <span class="at">control =</span> <span class="fu">list</span>(<span class="at">maxit =</span> maxit),</span>
+<span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a>                    <span class="at">lower =</span> lower, <span class="at">upper =</span> upper)</span>
+<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a>  <span class="fu">return</span>(CtP_optim)</span>
+<span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a>}</span>
+<span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a>MA_logGamma <span class="ot">&lt;-</span> <span class="cf">function</span>(mu, sigma, <span class="at">start =</span> <span class="cn">NULL</span>, <span class="at">method.optim =</span> <span class="st">&quot;L-BFGS-B&quot;</span>,</span>
+<span id="cb1-32"><a href="#cb1-32" tabindex="-1"></a>                         <span class="at">maxit =</span> <span class="dv">200</span>, <span class="at">lower =</span> <span class="dv">0</span>, <span class="at">upper =</span> <span class="cn">Inf</span>){</span>
+<span id="cb1-33"><a href="#cb1-33" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">is.null</span>(start)) start <span class="ot">&lt;-</span> <span class="fu">mean</span>(mu)</span>
+<span id="cb1-34"><a href="#cb1-34" tabindex="-1"></a>  MA_logGamma_ff <span class="ot">&lt;-</span> <span class="cf">function</span>(par, mu, sigma){</span>
+<span id="cb1-35"><a href="#cb1-35" tabindex="-1"></a>    sp <span class="ot">&lt;-</span> <span class="fu">plnorm</span>(par, <span class="at">meanlog =</span> mu[<span class="dv">1</span>], <span class="at">sdlog =</span> sigma[<span class="dv">1</span>])</span>
+<span id="cb1-36"><a href="#cb1-36" tabindex="-1"></a>    se <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pgamma</span>(par, <span class="at">shape =</span> mu[<span class="dv">2</span>], <span class="at">rate =</span> sigma[<span class="dv">2</span>])</span>
+<span id="cb1-37"><a href="#cb1-37" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">log</span>(sp) <span class="sc">+</span> <span class="fu">log</span>(se))</span>
+<span id="cb1-38"><a href="#cb1-38" tabindex="-1"></a>  }</span>
+<span id="cb1-39"><a href="#cb1-39" tabindex="-1"></a>  MA_optim <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="at">par =</span> start, <span class="at">fn =</span> MA_logGamma_ff, <span class="at">mu =</span> mu, <span class="at">sigma =</span> sigma,</span>
+<span id="cb1-40"><a href="#cb1-40" tabindex="-1"></a>                     <span class="at">method =</span> method.optim,</span>
+<span id="cb1-41"><a href="#cb1-41" tabindex="-1"></a>                     <span class="at">control =</span> <span class="fu">list</span>(<span class="at">maxit =</span> maxit, <span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>),</span>
+<span id="cb1-42"><a href="#cb1-42" tabindex="-1"></a>                     <span class="at">lower =</span> lower, <span class="at">upper =</span> upper)</span>
+<span id="cb1-43"><a href="#cb1-43" tabindex="-1"></a>  <span class="fu">return</span>(MA_optim)</span>
+<span id="cb1-44"><a href="#cb1-44" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>mu_logG_true_2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">3.6</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>sigma_logG_true_2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>tau_logG_true_2 <span class="ot">&lt;-</span> <span class="fu">YI_logGamma</span>(<span class="at">mu =</span> mu_logG_true_2,</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>                               <span class="at">sigma =</span> sigma_logG_true_2)<span class="sc">$</span>par</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>tau_logG_true_2</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; [1] 1.834898</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>tau_CtP_logG_true_2 <span class="ot">&lt;-</span> <span class="fu">CtP_logGamma</span>(<span class="at">mu =</span> mu_logG_true_2,</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>                                    <span class="at">sigma =</span> sigma_logG_true_2)<span class="sc">$</span>par</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>tau_CtP_logG_true_2</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; [1] 1.761806</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>tau_MA_logG_true_2 <span class="ot">&lt;-</span> <span class="fu">MA_logGamma</span>(<span class="at">mu =</span> mu_logG_true_2,</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>                                  <span class="at">sigma =</span> sigma_logG_true_2)<span class="sc">$</span>par</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>tau_MA_logG_true_2</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; [1] 1.811932</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>sp_logG_true_2 <span class="ot">&lt;-</span> <span class="fu">plnorm</span>(tau_logG_true_2, <span class="at">meanlog =</span> mu_logG_true_2[<span class="dv">1</span>],</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>                         <span class="at">sdlog =</span> sigma_logG_true_2[<span class="dv">1</span>])</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>se_logG_true_2 <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pgamma</span>(tau_logG_true_2, <span class="at">shape =</span> mu_logG_true_2[<span class="dv">2</span>],</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>                             <span class="at">rate =</span> sigma_logG_true_2[<span class="dv">2</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>sp_logG_true_2</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt; [1] 0.8876219</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>se_logG_true_2</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; [1] 0.832717</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>sp_MA_logG_true_2 <span class="ot">&lt;-</span> <span class="fu">plnorm</span>(tau_MA_logG_true_2, <span class="at">meanlog =</span> mu_logG_true_2[<span class="dv">1</span>],</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>                             <span class="at">sdlog =</span> sigma_logG_true_2[<span class="dv">1</span>])</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>se_MA_logG_true_2 <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pgamma</span>(tau_MA_logG_true_2, <span class="at">shape =</span> mu_logG_true_2[<span class="dv">2</span>],</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>                                <span class="at">rate =</span> sigma_logG_true_2[<span class="dv">2</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>sp_MA_logG_true_2</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&gt; [1] 0.8827383</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>se_MA_logG_true_2</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&gt; [1] 0.8374735</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>n1 <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>n2 <span class="ot">&lt;-</span> <span class="dv">50</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>X1 <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(n1, <span class="at">meanlog =</span> mu_logG_true_2[<span class="dv">1</span>], <span class="at">sdlog =</span> sigma_logG_true_2[<span class="dv">1</span>])</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>X2 <span class="ot">&lt;-</span> <span class="fu">rgamma</span>(n2, <span class="at">shape =</span> mu_logG_true_2[<span class="dv">2</span>], <span class="at">rate =</span> sigma_logG_true_2[<span class="dv">2</span>])</span></code></pre></div>
+<p>To obtain the optimal threshold and plot the confidence region for
+optimal sensitivity and specificity, we perform the following
+command:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>out1 <span class="ot">&lt;-</span> <span class="fu">threshold2</span>(<span class="at">x =</span> X1, <span class="at">y =</span> X2, <span class="at">method =</span> <span class="st">&quot;YI&quot;</span>, <span class="at">kernel_type =</span> <span class="st">&quot;gauss&quot;</span>, </span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>                   <span class="at">bwd_type =</span> <span class="st">&quot;AZZ&quot;</span>, <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>out2 <span class="ot">&lt;-</span> <span class="fu">threshold2</span>(<span class="at">x =</span> X1, <span class="at">y =</span> X2, <span class="at">method =</span> <span class="st">&quot;YI&quot;</span>, <span class="at">kernel_type =</span> <span class="st">&quot;gauss&quot;</span>, </span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>                   <span class="at">bwd_type =</span> <span class="st">&quot;CV&quot;</span>, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">plot</span>(out2)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>out3 <span class="ot">&lt;-</span> <span class="fu">threshold2</span>(<span class="at">x =</span> X1, <span class="at">y =</span> X2, <span class="at">method =</span> <span class="st">&quot;MA&quot;</span>, <span class="at">kernel_type =</span> <span class="st">&quot;gauss&quot;</span>,</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>                   <span class="at">bwd_type =</span> <span class="st">&quot;CV&quot;</span>, <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<p>Using formula</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>data_test <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">biom =</span> <span class="fu">c</span>(X1, X2), <span class="at">diag =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;1&quot;</span>, <span class="st">&quot;2&quot;</span>), <span class="fu">c</span>(n1, n2)))</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>out4 <span class="ot">&lt;-</span> <span class="fu">threshold2</span>(<span class="at">formula =</span> biom <span class="sc">~</span> diag, <span class="at">data =</span> data_test, <span class="at">method =</span> <span class="st">&quot;MA&quot;</span>, </span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>                   <span class="at">kernel_type =</span> <span class="st">&quot;gauss&quot;</span>, <span class="at">bwd_type =</span> <span class="st">&quot;CV&quot;</span>, <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>out4<span class="sc">$</span>ci_tau</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="co">#&gt; [1] 1.552498 2.054105</span></span></code></pre></div>
+<p>The following codes are for verifying the coverage probability of EL
+confidence region for sensitivity and specificity at optimal
+threshold.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>term1 <span class="ot">&lt;-</span> emplikDTA<span class="sc">:::</span><span class="fu">empi_llike_prepare</span>(<span class="at">x =</span> X1, <span class="at">y =</span> X2, </span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>                                        <span class="at">tau =</span> tau_logG_true_2, </span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>                                        <span class="at">type_F =</span> <span class="st">&quot;empi&quot;</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a>term2 <span class="ot">&lt;-</span> emplikDTA<span class="sc">:::</span><span class="fu">empi_llike_2C</span>(term1, <span class="at">spe =</span> sp_logG_true_2,</span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a>                                   <span class="at">sen =</span> se_logG_true_2)</span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a>term2 <span class="sc">&lt;</span> out1<span class="sc">$</span>c_alp</span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
+<p>Run the following chunks interactively for the 1,000-replicate
+coverage study.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>out_cp_1 <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>, <span class="cf">function</span>(i, n1, n2){</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>  X1 <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(n1, <span class="at">meanlog =</span> mu_logG_true_2[<span class="dv">1</span>], <span class="at">sdlog =</span> sigma_logG_true_2[<span class="dv">1</span>])</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>  X2 <span class="ot">&lt;-</span> <span class="fu">rgamma</span>(n2, <span class="at">shape =</span> mu_logG_true_2[<span class="dv">2</span>], <span class="at">rate =</span> sigma_logG_true_2[<span class="dv">2</span>])</span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>  term1 <span class="ot">&lt;-</span> emplikDTA<span class="sc">:::</span><span class="fu">empi_llike_prepare</span>(<span class="at">x =</span> X1, <span class="at">y =</span> X2, </span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>                                          <span class="at">tau =</span> tau_logG_true_2, </span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a>                                          <span class="at">type_F =</span> <span class="st">&quot;empi&quot;</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a>  term2 <span class="ot">&lt;-</span> emplikDTA<span class="sc">:::</span><span class="fu">empi_llike_2C</span>(term1, <span class="at">spe =</span> sp_logG_true_2,</span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a>                                     <span class="at">sen =</span> se_logG_true_2)</span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a>  out1 <span class="ot">&lt;-</span> <span class="fu">threshold2</span>(<span class="at">x =</span> X1, <span class="at">y =</span> X2, <span class="at">method =</span> <span class="st">&quot;YI&quot;</span>, <span class="at">kernel_type =</span> <span class="st">&quot;gauss&quot;</span>, </span>
+<span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a>                     <span class="at">bwd_type =</span> <span class="st">&quot;AZZ&quot;</span>, <span class="at">plot =</span> <span class="cn">FALSE</span>, <span class="at">seed =</span> i)</span>
+<span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">c</span>(term2, out1<span class="sc">$</span>c_alp, term2 <span class="sc">&lt;</span> out1<span class="sc">$</span>c_alp))</span>
+<span id="cb20-12"><a href="#cb20-12" tabindex="-1"></a>}, <span class="at">n1 =</span> <span class="dv">50</span>, <span class="at">n2 =</span> <span class="dv">50</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">mean</span>(out_cp_1[<span class="dv">3</span>,])</span></code></pre></div>
+</div>
+</div>
+<div id="application-to-data" class="section level1">
+<h1>Application to data</h1>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

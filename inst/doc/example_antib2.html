@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Duc-Khanh To" />
+
+<meta name="date" content="2026-11-05" />
+
+<title>ROC Analysis with the antib2 Data</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">ROC Analysis with the antib2 Data</h1>
+<h4 class="author">Duc-Khanh To</h4>
+<h4 class="date">2026-11-05</h4>
+
+
+
+<div id="prepare-the-data" class="section level2">
+<h2>Prepare the data</h2>
+<p>The dataset contains RBD-specific IgG titers measured after the
+second dose of the BNT162b2 vaccine. The <code>status</code> variable
+records prior SARS-CoV-2 infection. The reference-negative group
+(<code>0</code>) includes 58 participants with no prior infection, and
+the reference-positive group (<code>1</code>) includes 42 participants
+with prior infection. The classification rule treats a titer above the
+threshold as positive. The <code>diag_levels</code> argument lists the
+reference-negative group first and the reference-positive group
+second.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(emplikDTA)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;antib2&quot;</span>, <span class="at">package =</span> <span class="st">&quot;emplikDTA&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">table</span>(data_antib2<span class="sc">$</span>status)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co">#&gt;  0  1 </span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co">#&gt; 58 42</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>group_order <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;0&quot;</span>, <span class="st">&quot;1&quot;</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="co"># Use thousands of AU/mL to improve numerical scaling for threshold optimization.</span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>antib <span class="ot">&lt;-</span> <span class="fu">transform</span>(data_antib2, <span class="at">titer_kAU =</span> antib2 <span class="sc">/</span> <span class="dv">1000</span>)</span></code></pre></div>
+<p>Rescaling preserves the ordering of the titers and therefore the
+empirical ROC curve and AUC. The threshold and its confidence interval
+are reported in AU/mL.</p>
+</div>
+<div id="plot-the-empirical-roc-curve-with-roc_emp_curve" class="section level2">
+<h2>1. Plot the empirical ROC curve with
+<code>ROC_emp_curve()</code></h2>
+<p>At each threshold, specificity (<code>sp</code>) is the proportion of
+the reference-negative group with titers at or below the threshold.
+Sensitivity (<code>se</code>) is the proportion of the
+reference-positive group with titers above the threshold. The ROC curve
+plots the false positive rate <span class="math inline">\(1 -
+\mathrm{Sp}\)</span> on the horizontal axis and sensitivity <span class="math inline">\(\mathrm{Se}\)</span> on the vertical axis. The
+<code>ncp</code> argument sets the number of thresholds used to draw the
+curve.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>roc_fit <span class="ot">&lt;-</span> <span class="fu">ROC_emp_curve</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  titer_kAU <span class="sc">~</span> status, <span class="at">data =</span> antib, <span class="at">diag_levels =</span> group_order,</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="at">ncp =</span> <span class="dv">1000</span>, <span class="at">plot =</span> <span class="cn">FALSE</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>roc_plot <span class="ot">&lt;-</span> <span class="fu">plot</span>(roc_fit) <span class="sc">+</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Empirical ROC curve for IgG titers&quot;</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>roc_plot</span></code></pre></div>
+<p><img role="img" aria-label src="data:image/png;base64,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" alt style="display: block; margin: auto;" /></p>
+</div>
+<div id="estimate-the-area-under-the-roc-curve-with-auc" class="section level2">
+<h2>2. Estimate the area under the ROC curve with
+<code>auc()</code></h2>
+<p>The AUC is the probability that a randomly selected participant from
+the reference-positive group has a higher titer than one from the
+reference-negative group, plus half the probability of a tie.
+<code>auc()</code> estimates the AUC from the observations and computes
+a bootstrap-adjusted empirical likelihood (EL) confidence interval. With
+<code>auc0 = 0.5</code> and <code>alternative = &quot;greater&quot;</code>,
+<code>p.value</code> tests <span class="math inline">\(H_0: \mathrm{AUC}
+= 0.5\)</span> against <span class="math inline">\(H_1: \mathrm{AUC}
+&gt; 0.5\)</span>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>auc_fit <span class="ot">&lt;-</span> <span class="fu">auc</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  titer_kAU <span class="sc">~</span> status, <span class="at">data =</span> antib, <span class="at">diag_levels =</span> group_order,</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="at">auc0 =</span> <span class="fl">0.5</span>, <span class="at">ci_level =</span> <span class="fl">0.95</span>, <span class="at">B =</span> <span class="dv">500</span>, <span class="at">seed =</span> <span class="dv">34</span>, <span class="at">alternative =</span> <span class="st">&quot;greater&quot;</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="fu">print</span>(auc_fit)</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; AUC estimate:</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; [1] 0.7278325</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; 95% Confidence interval:</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; [1] 0.6264359 0.8154532</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; p-value (greater): 1.109912e-05</span></span></code></pre></div>
+</div>
+<div id="compare-optimal-thresholds-with-threshold2" class="section level2">
+<h2>3. Compare optimal thresholds with <code>threshold2()</code></h2>
+<p>Set <code>method = &quot;all&quot;</code> to fit the three criteria in one
+call. Each criterion uses the same Gaussian kernel bandwidths selected
+by cross-validation and the same 1,000 bootstrap resamples.</p>
+<ul>
+<li><strong>YI</strong> maximizes Youden’s index <span class="math inline">\(\mathrm{Sp} + \mathrm{Se} - 1\)</span>.</li>
+<li><strong>CtP</strong> minimizes the distance from <span class="math inline">\((1 - \mathrm{Sp}, \mathrm{Se})\)</span> to the
+upper-left corner <span class="math inline">\((0, 1)\)</span> of the ROC
+plot.</li>
+<li><strong>MA</strong> maximizes the product <span class="math inline">\(\mathrm{Sp}\,\mathrm{Se}\)</span>.</li>
+</ul>
+<p>With <code>ci = TRUE</code>, each fit includes a bootstrap percentile
+confidence interval for its threshold and a bootstrap-calibrated joint
+empirical likelihood (EL) region for specificity and sensitivity. The
+seed makes the bootstrap reproducible.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>opt_fit <span class="ot">&lt;-</span> <span class="fu">threshold2</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  titer_kAU <span class="sc">~</span> status, <span class="at">data =</span> antib, <span class="at">diag_levels =</span> group_order,</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;all&quot;</span>, <span class="at">kernel_type =</span> <span class="st">&quot;gauss&quot;</span>, <span class="at">bwd_type =</span> <span class="st">&quot;CV&quot;</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="at">ci =</span> <span class="cn">TRUE</span>, <span class="at">ci_level =</span> <span class="fl">0.95</span>, <span class="at">B =</span> <span class="dv">1000</span>, <span class="at">seed =</span> <span class="dv">34</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>)</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>thresholds <span class="ot">&lt;-</span> opt_fit<span class="sc">$</span>summary</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>    <span class="at">Criterion =</span> thresholds<span class="sc">$</span>method,</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>    <span class="at">Threshold =</span> <span class="dv">1000</span> <span class="sc">*</span> thresholds<span class="sc">$</span>opt_thresh,</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>    <span class="at">Lower =</span> <span class="dv">1000</span> <span class="sc">*</span> thresholds<span class="sc">$</span>ci_tau_lower,</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>    <span class="at">Upper =</span> <span class="dv">1000</span> <span class="sc">*</span> thresholds<span class="sc">$</span>ci_tau_upper,</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>    <span class="at">Specificity =</span> thresholds<span class="sc">$</span>spe_opt,</span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>    <span class="at">Sensitivity =</span> thresholds<span class="sc">$</span>sen_opt</span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>  ),</span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>  <span class="at">digits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>),</span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">&quot;Thresholds and 95% bootstrap intervals in AU/mL, with kernel estimates of specificity and sensitivity.&quot;</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a>)</span></code></pre></div>
+<table>
+<caption>Thresholds and 95% bootstrap intervals in AU/mL, with kernel
+estimates of specificity and sensitivity.</caption>
+<thead>
+<tr class="header">
+<th align="left">Criterion</th>
+<th align="right">Threshold</th>
+<th align="right">Lower</th>
+<th align="right">Upper</th>
+<th align="right">Specificity</th>
+<th align="right">Sensitivity</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">YI</td>
+<td align="right">18655.0</td>
+<td align="right">13332.6</td>
+<td align="right">33851.0</td>
+<td align="right">0.585</td>
+<td align="right">0.704</td>
+</tr>
+<tr class="even">
+<td align="left">CtP</td>
+<td align="right">20407.5</td>
+<td align="right">17171.4</td>
+<td align="right">24347.6</td>
+<td align="right">0.630</td>
+<td align="right">0.657</td>
+</tr>
+<tr class="odd">
+<td align="left">MA</td>
+<td align="right">20117.7</td>
+<td align="right">16538.8</td>
+<td align="right">25444.0</td>
+<td align="right">0.622</td>
+<td align="right">0.665</td>
+</tr>
+</tbody>
+</table>
+<p>YI selects a lower threshold than CtP and MA, with higher estimated
+sensitivity and lower estimated specificity. Its bootstrap interval for
+the threshold is also wider. CtP and MA select similar thresholds.</p>
+</div>
+<div id="compare-the-joint-confidence-regions-on-the-roc-curve" class="section level2">
+<h2>4. Compare the joint confidence regions on the ROC curve</h2>
+<p>The individual fits are stored in <code>opt_fit$results</code>, for
+example <code>opt_fit$results$YI</code>. For each criterion,
+<code>spe_sen_emp</code> gives the empirical operating point at the
+estimated threshold, <code>grid_sen_spe</code> stores the EL statistic
+<code>z</code>, and <code>c_alp</code> gives the bootstrap-calibrated
+cutoff. The plot uses the zero contour of <code>z - c_alp</code> to draw
+each criterion’s region on the same ROC axes. The 95% level applies to
+each region separately.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>operating_points <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(opt_fit<span class="sc">$</span>results, <span class="cf">function</span>(fit) {</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>    <span class="at">method =</span> fit<span class="sc">$</span>method,</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>    <span class="at">FPR =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">unname</span>(fit<span class="sc">$</span>spe_sen_emp[<span class="st">&quot;sp&quot;</span>]),</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>    <span class="at">TPR =</span> <span class="fu">unname</span>(fit<span class="sc">$</span>spe_sen_emp[<span class="st">&quot;se&quot;</span>]),</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>    <span class="at">EL_cutoff =</span> fit<span class="sc">$</span>c_alp</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  )</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>}))</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>  operating_points, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">digits =</span> <span class="dv">3</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>  <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Criterion&quot;</span>, <span class="st">&quot;Empirical FPR&quot;</span>, <span class="st">&quot;Empirical sensitivity&quot;</span>, <span class="st">&quot;EL cutoff&quot;</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Criterion</th>
+<th align="right">Empirical FPR</th>
+<th align="right">Empirical sensitivity</th>
+<th align="right">EL cutoff</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">YI</td>
+<td align="right">0.379</td>
+<td align="right">0.714</td>
+<td align="right">37.855</td>
+</tr>
+<tr class="even">
+<td align="left">CtP</td>
+<td align="right">0.362</td>
+<td align="right">0.667</td>
+<td align="right">5.301</td>
+</tr>
+<tr class="odd">
+<td align="left">MA</td>
+<td align="right">0.362</td>
+<td align="right">0.667</td>
+<td align="right">7.129</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>criteria <span class="ot">&lt;-</span> <span class="fu">names</span>(opt_fit<span class="sc">$</span>results)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>operating_points<span class="sc">$</span>method <span class="ot">&lt;-</span> <span class="fu">factor</span>(operating_points<span class="sc">$</span>method, <span class="at">levels =</span> criteria)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>el_grid <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(opt_fit<span class="sc">$</span>results, <span class="cf">function</span>(fit) {</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  grid <span class="ot">&lt;-</span> <span class="fu">subset</span>(fit<span class="sc">$</span>grid_sen_spe, <span class="fu">is.finite</span>(z))</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="fu">transform</span>(grid, <span class="at">method =</span> <span class="fu">factor</span>(fit<span class="sc">$</span>method, <span class="at">levels =</span> criteria),</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>            <span class="at">centered_el =</span> z <span class="sc">-</span> fit<span class="sc">$</span>c_alp)</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>}))</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>roc_plot <span class="sc">+</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">geom_contour</span>(</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>    <span class="at">data =</span> el_grid,</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>    <span class="at">mapping =</span> ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1</span> <span class="sc">-</span> Spe, <span class="at">y =</span> Sen, <span class="at">z =</span> centered_el),</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="dv">0</span>, <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>, <span class="at">colour =</span> <span class="st">&quot;firebrick&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.9</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">geom_point</span>(</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>    <span class="at">data =</span> operating_points, <span class="at">mapping =</span> ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">x =</span> FPR, <span class="at">y =</span> TPR),</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>    <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>, <span class="at">colour =</span> <span class="st">&quot;firebrick&quot;</span>, <span class="at">size =</span> <span class="fl">2.5</span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">facet_wrap</span>(ggplot2<span class="sc">::</span><span class="fu">vars</span>(method), <span class="at">nrow =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">theme</span>(<span class="at">panel.spacing.x =</span> grid<span class="sc">::</span><span class="fu">unit</span>(<span class="fl">1.5</span>, <span class="st">&quot;lines&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">labs</span>(<span class="at">subtitle =</span> <span class="st">&quot;Empirical operating points and 95% joint EL regions&quot;</span>)</span></code></pre></div>
+<p><img role="img" aria-label src="data:image/png;base64,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" alt style="display: block; margin: auto;" /></p>
+<p>On these data, CtP and MA give the same empirical operating point
+even though their fitted thresholds differ. YI has a much wider joint
+region, consistent with the greater variability of its estimated
+threshold across the shared bootstrap samples.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
